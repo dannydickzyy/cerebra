@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>CEREBRA · Stroke Analytics</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="vendor/plotly.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div id="app"><div class="boot"><img src="assets/logo.png" alt=""><h1>CEREBRA</h1><p>Opening your analytics workspace…</p></div></div>
+  <dialog id="loading-modal" class="loading-modal" aria-labelledby="loading-title" aria-describedby="loading-description">
+    <div class="loading-orbit" aria-hidden="true"><img src="assets/logo.png" alt=""></div>
+    <div class="eyebrow">CEREBRA · PLEASE WAIT</div>
+    <div role="status" aria-live="polite" aria-atomic="true">
+      <h2 id="loading-title"></h2>
+      <p id="loading-description"></p>
+    </div>
+    <div class="loading-footnote">Please keep this window open.</div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

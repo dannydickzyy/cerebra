@@ -1,0 +1,202 @@
+{
+  "rows": 50000,
+  "positives": 2427,
+  "prevalence": 0.04854,
+  "missing_bmi": 2500,
+  "age": [
+    {
+      "label": "18\u201329",
+      "count": 8298,
+      "positive": 387,
+      "rate": 4.664
+    },
+    {
+      "label": "30\u201339",
+      "count": 6878,
+      "positive": 339,
+      "rate": 4.929
+    },
+    {
+      "label": "40\u201349",
+      "count": 7012,
+      "positive": 370,
+      "rate": 5.277
+    },
+    {
+      "label": "50\u201359",
+      "count": 6880,
+      "positive": 327,
+      "rate": 4.753
+    },
+    {
+      "label": "60\u201369",
+      "count": 6935,
+      "positive": 308,
+      "rate": 4.441
+    },
+    {
+      "label": "70+",
+      "count": 13997,
+      "positive": 696,
+      "rate": 4.972
+    }
+  ],
+  "glucose": [
+    {
+      "label": "<90",
+      "count": 5496,
+      "positive": 274,
+      "rate": 4.985
+    },
+    {
+      "label": "90\u2013125",
+      "count": 10117,
+      "positive": 490,
+      "rate": 4.843
+    },
+    {
+      "label": "126\u2013160",
+      "count": 9625,
+      "positive": 440,
+      "rate": 4.571
+    },
+    {
+      "label": "161\u2013200",
+      "count": 11201,
+      "positive": 571,
+      "rate": 5.098
+    },
+    {
+      "label": ">200",
+      "count": 13561,
+      "positive": 652,
+      "rate": 4.808
+    }
+  ],
+  "bmi": [
+    {
+      "label": "Under",
+      "count": 6481,
+      "positive": 328,
+      "rate": 5.061
+    },
+    {
+      "label": "Normal",
+      "count": 12357,
+      "positive": 609,
+      "rate": 4.928
+    },
+    {
+      "label": "Overweight",
+      "count": 9470,
+      "positive": 479,
+      "rate": 5.058
+    },
+    {
+      "label": "Obese I",
+      "count": 9448,
+      "positive": 453,
+      "rate": 4.795
+    },
+    {
+      "label": "Obese II+",
+      "count": 9744,
+      "positive": 459,
+      "rate": 4.711
+    }
+  ],
+  "smoking": [
+    {
+      "label": "Unknown",
+      "count": 12524,
+      "positive": 581,
+      "rate": 4.639
+    },
+    {
+      "label": "formerly smoked",
+      "count": 12549,
+      "positive": 595,
+      "rate": 4.741
+    },
+    {
+      "label": "never smoked",
+      "count": 12543,
+      "positive": 618,
+      "rate": 4.927
+    },
+    {
+      "label": "smokes",
+      "count": 12384,
+      "positive": 633,
+      "rate": 5.111
+    }
+  ],
+  "residence": [
+    {
+      "label": "Rural",
+      "count": 24968,
+      "positive": 1222,
+      "rate": 4.894
+    },
+    {
+      "label": "Urban",
+      "count": 25032,
+      "positive": 1205,
+      "rate": 4.814
+    }
+  ],
+  "work": [
+    {
+      "label": "Children",
+      "count": 12451,
+      "positive": 579,
+      "rate": 4.65
+    },
+    {
+      "label": "Govt_job",
+      "count": 12524,
+      "positive": 622,
+      "rate": 4.966
+    },
+    {
+      "label": "Private",
+      "count": 12480,
+      "positive": 644,
+      "rate": 5.16
+    },
+    {
+      "label": "Self-employed",
+      "count": 12545,
+      "positive": 582,
+      "rate": 4.639
+    }
+  ],
+  "gender": [
+    {
+      "label": "Female",
+      "count": 25040,
+      "positive": 1212,
+      "rate": 4.84
+    },
+    {
+      "label": "Male",
+      "count": 24960,
+      "positive": 1215,
+      "rate": 4.868
+    }
+  ],
+  "hypertension": [
+    {
+      "label": "0",
+      "count": 42439,
+      "positive": 2053,
+      "rate": 4.838
+    },
+    {
+      "label": "1",
+      "count": 7561,
+      "positive": 374,
+      "rate": 4.946
+    }
+  ]
+}

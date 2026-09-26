@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  --font-sans: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  --font-mono: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+
+  /* Navy Plum — sidebar base */
+  --color-indigo-ink: #1a1128;
+  --color-indigo-deep: #130d1e;
+  --color-indigo-soft: #2e1f45;
+
+  /* Terracotta Orange — primary accent (vivid burnt-orange, fully legible) */
+  --color-terracotta: #d4511a;
+  --color-terracotta-deep: #b83e0e;
+
+  /* Near-white canvas — clinical/clean main background */
+  --color-vanilla: #f9fafb;
+  --color-vanilla-deep: #eef0f3;
+  --color-cream: #ffffff;
+  /* Warm cream — kept for accent use (card tints, active states) */
+  --color-cream-warm: #f5ecdd;
+
+  /* Text */
+  --color-ink: #211a2e;
+  --color-slate-muted: #6e6478;
+
+  /* Risk semantics — fully saturated for chart legibility */
+  --color-risk-high: #e04b1a;
+  --color-risk-mid: #f07832;
+  --color-risk-low: #22c55e;
+  --color-risk-gold: #f5b731;
+}
+
+:root {
+  --background: var(--color-vanilla);
+  --foreground: var(--color-ink);
+  --border-default: rgba(26, 17, 40, 0.10);
+}
+
+/* ── Dark mode overrides ── */
+.dark {
+  --color-vanilla: #13111d;
+  --color-vanilla-deep: #1d1929;
+  --color-cream: #1c1728;
+  --color-ink: #ede9f8;
+  /* Slate-muted is significantly lightened in dark mode for readability */
+  --color-slate-muted: #c4bbd8;
+  --color-cream-warm: #2a1e38;
+  --border-default: rgba(255, 255, 255, 0.09);
+}
+
+* {
+  border-color: var(--border-default);
+}
+
+body {
+  margin: 0;
+  background: var(--color-vanilla);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hide scrollbars until scrolling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+*:hover,
+*:focus-within {
+  scrollbar-color: rgba(232, 147, 92, 0.30) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 8px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(38, 59, 170, 0.22);
+}
+
+::selection {
+  background: rgba(38, 59, 170, 0.18);
+}
+
+/* Dark mode: override hardcoded dark-on-dark borders and tints */
+.dark [class*="border-\[rgba(26"] {
+  border-color: rgba(255, 255, 255, 0.09) !important;
+}
+.dark [class*="divide-\[rgba(26"] > * + * {
+  border-color: rgba(255, 255, 255, 0.07) !important;
+}
+.dark [class*="bg-\[rgba(26"] {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Dark mode: chart grid lines and cursor strokes */
+.dark .recharts-cartesian-grid line {
+  stroke: rgba(255, 255, 255, 0.07) !important;
+}
+.dark .recharts-tooltip-cursor {
+  stroke: rgba(255, 255, 255, 0.15) !important;
+  fill: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Dark mode: native inputs & scrollbars */
+.dark input,
+.dark select,
+.dark textarea {
+  color-scheme: dark;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes sweep {
+  from {
+    stroke-dashoffset: var(--dash);
+  }
+  to {
+    stroke-dashoffset: var(--offset);
+  }
+}

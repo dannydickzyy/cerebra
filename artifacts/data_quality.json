@@ -1,0 +1,77 @@
+{
+  "rows": 50000,
+  "columns": [
+    "id",
+    "gender",
+    "age",
+    "hypertension",
+    "heart_disease",
+    "ever_married",
+    "work_type",
+    "Residence_type",
+    "avg_glucose_level",
+    "bmi",
+    "smoking_status",
+    "stroke"
+  ],
+  "missing_values": {
+    "id": 0,
+    "gender": 0,
+    "age": 0,
+    "hypertension": 0,
+    "heart_disease": 0,
+    "ever_married": 0,
+    "work_type": 0,
+    "Residence_type": 0,
+    "avg_glucose_level": 0,
+    "bmi": 2500,
+    "smoking_status": 0,
+    "stroke": 0
+  },
+  "duplicate_rows": 0,
+  "duplicate_ids": 0,
+  "target_counts": {
+    "0": 47573,
+    "1": 2427
+  },
+  "numeric_ranges": {
+    "age": {
+      "min": 18.0,
+      "max": 90.0
+    },
+    "avg_glucose_level": {
+      "min": 70.01,
+      "max": 250.0
+    },
+    "bmi": {
+      "min": 15.0,
+      "max": 40.0
+    }
+  },
+  "categories": {
+    "gender": [
+      "Female",
+      "Male"
+    ],
+    "ever_married": [
+      "No",
+      "Yes"
+    ],
+    "work_type": [
+      "Children",
+      "Govt_job",
+      "Private",
+      "Self-employed"
+    ],
+    "Residence_type": [
+      "Rural",
+      "Urban"
+    ],
+    "smoking_status": [
+      "Unknown",
+      "formerly smoked",
+      "never smoked",
+      "smokes"
+    ]
+  }
+}
