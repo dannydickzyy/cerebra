@@ -1,0 +1,201 @@
+<!-- Model Performance templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for model stats. Values come from the matching page controller. -->
+<template id="model-stats">
+  <div class="grid grid-4 mb-section">
+    {{accuracy_stat}}{{precision_stat}}{{recall_stat}}{{f1_stat}}
+  </div>
+</template>
+
+<!-- Markup for model confusion matrix. Values come from the matching page controller. -->
+<template id="model-confusion-matrix">
+  <div class="cm-grid">{{cells}}</div>
+  <p class="chart-caption">
+    {{test_count}} test records · {{positive_count}} positive labels · fixed 50%
+    threshold. Recall target ≥ 70%: <strong>{{recall_status}}</strong>.
+  </p>
+</template>
+
+<!-- Markup for model confusion cell. Values come from the matching page controller. -->
+<template id="model-confusion-cell">
+  <div class="cm-cell {{error_class}}">
+    <label>{{label}}</label>
+    <strong>{{count}}</strong>
+    <small>{{note}}</small>
+  </div>
+</template>
+
+<!-- Markup for model results table. Values come from the matching page controller. -->
+<template id="model-results-table">
+  <div class="table-responsive">
+    <table class="metric-table">
+      <thead>
+        <tr>
+          <th>Candidate</th>
+          {{headers}}
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<!-- Markup for model results heading. Values come from the matching page controller. -->
+<template id="model-results-heading">
+  <th>{{label}}</th>
+</template>
+
+<!-- Markup for model results row. Values come from the matching page controller. -->
+<template id="model-results-row">
+  <tr class="{{selected_class}}">
+    <td>{{model_name}}{{active_label}}</td>
+    {{metrics}}
+  </tr>
+</template>
+
+<!-- Markup for model results value. Values come from the matching page controller. -->
+<template id="model-results-value">
+  <td>{{value}}</td>
+</template>
+
+<!-- Markup for model selector. Values come from the matching page controller. -->
+<template id="model-selector">
+  <div class="context-row">
+    <span class="source-pill">
+      <span class="dot"> </span>HELD-OUT TEST SET · {{test_count}} RECORDS</span
+    >
+    <label class="d-flex align-items-center gap-2 small muted"
+      >Inspect model<select class="form-select" id="model-select">
+        <option value="all">All models</option>
+        {{model_options}}
+      </select>
+    </label>
+  </div>
+</template>
+
+<!-- Markup for model option. Values come from the matching page controller. -->
+<template id="model-option">
+  <option {{selected}}>{{model_name}}</option>
+</template>
+
+<!-- Markup for model detail. Values come from the matching page controller. -->
+<template id="model-detail">
+  <div class="grid grid-2">{{comparison_panel}}{{matrix_panel}}</div>
+  <div class="mt-4">{{evidence_panel}}</div>
+  <div class="grid grid-2 mt-4">{{roc_panel}}{{precision_recall_panel}}</div>
+  <div class="mt-4">{{protocol_panel}}</div>
+</template>
+
+<!-- Markup for model legend. Values come from the matching page controller. -->
+<template id="model-legend">
+  <div class="legend justify-content-center">{{legend_items}}</div>
+</template>
+
+<!-- Markup for model legend item. Values come from the matching page controller. -->
+<template id="model-legend-item">
+  <span> <i style="background:{{color}}"> </i>{{model_name}}</span>
+</template>
+
+<!-- Markup for model protocol. Values come from the matching page controller. -->
+<template id="model-protocol">
+  <div class="grid grid-2">
+    <div>{{protocol_rows}}</div>
+    <div class="notice">
+      <strong>{{model_name}}</strong> was selected using validation recall, with
+      F1 and ROC-AUC as tie-breakers. Test results were measured afterward.<br />
+      <br />Median imputation, scaling, and one-hot encoding are fitted on
+      training rows. SMOTE never touches validation or test rows. Plain SMOTE
+      can produce fractional encoded categories, as noted in your PDF; this
+      remains an exploratory limitation.<br />
+      <br />Model version: <strong>{{model_version}}</strong>
+    </div>
+  </div>
+  <button class="btn btn-outline-secondary mt-3" id="export-report">
+    {{download_icon}} Download evaluation JSON
+  </button>
+</template>
+
+<!-- Markup for model protocol row. Values come from the matching page controller. -->
+<template id="model-protocol-row">
+  <div class="mini-row">
+    <span>{{label}}</span>
+    <b>{{value}}</b>
+  </div>
+</template>
+
+<!-- Markup for models table. Values come from the matching page controller. -->
+<template id="models-table">
+  <div class="table-responsive">
+    <table class="metric-table all-models-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          {{headers}}
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+
+<!-- Markup for models table row. Values come from the matching page controller. -->
+<template id="models-table-row">
+  <tr class="{{selected_class}}">
+    <td><strong>{{model_name}}</strong>{{model_status}}</td>
+    {{metrics}}
+  </tr>
+</template>
+
+
+<!-- Markup for models confusion matrix. Values come from the matching page controller. -->
+<template id="models-confusion-matrix">
+  <div class="cm-grid">{{cells}}</div>
+  <p class="chart-caption">
+    Recall target ≥ 70%: <strong>{{recall_status}}</strong> · ROC-AUC
+    {{roc_auc}}
+  </p>
+</template>
+
+
+<!-- Markup for models selector. Values come from the matching page controller. -->
+<template id="models-selector">
+  <div class="context-row">
+    <span class="source-pill">
+      <span class="dot"> </span>SAME HELD-OUT TEST SET · {{test_count}}
+      RECORDS</span
+    >
+    <label class="d-flex align-items-center gap-2 small muted"
+      >Inspect model<select class="form-select" id="model-select">
+        <option value="all" selected>All models</option>
+        {{model_options}}
+      </select>
+    </label>
+  </div>
+</template>
+
+
+<!-- Markup for models comparison note. Values come from the matching page controller. -->
+<template id="models-comparison-note">
+  <p class="chart-caption mt-3">
+    All {{model_count}} evaluated models use the same test records and a 50%
+    classification threshold. The active model was selected using validation
+    recall; accuracy alone does not establish predictive usefulness.
+  </p>
+</template>
+
+<!-- Markup for models overview. Values come from the matching page controller. -->
+<template id="models-overview">
+  <div class="mt-4">{{comparison_panel}}</div>
+  <div class="section-label">Classification outcomes · all models</div>
+  <div class="grid grid-2">{{matrices}}</div>
+  <button class="btn btn-outline-secondary mt-4" id="export-report">
+    {{download_icon}} Download evaluation JSON
+  </button>
+</template>
+
+

@@ -16,6 +16,28 @@ Open **http://localhost:8501**. Alternatively, run `./run.ps1`.
 
 The supplied model is already trained. The app works offline after setup; Bootstrap, chart JavaScript, CSS, and the logo are local files. Only the external dataset-attribution link needs an internet connection.
 
+## Accounts
+
+Everyone signs in before any data is shown. The first admin and healthcare worker are created the first time the app starts with an empty user table. Their usernames and passwords come from a local `.env` file, which git ignores so credentials never reach the repository:
+
+```powershell
+Copy-Item .env.example .env   # then edit .env and set both passwords
+```
+
+If a password is left blank, the app creates a random one and prints it once in the terminal running Streamlit. Change both passwords after the first sign-in (avatar → Settings → Change password). Passwords are stored as salted scrypt hashes in the SQLite database. Five wrong passwords in a row pause sign-in for 30 seconds. Reloading the browser ends the session.
+
+| | Admin | Healthcare worker |
+|---|---|---|
+| Screenings | Every site | Only their assigned site; new screenings are saved to that site |
+| **User management** | Create accounts, edit name/role/site, disable, reset passwords | — |
+| **Audit log** | Sign-ins, failed sign-ins, sign-outs, timeouts, account changes, saved/deleted screenings, follow-ups, backups | — |
+| Delete a screening | From Risk breakdown, after re-entering their password | — |
+| **System & backups** | Create database backups, restore one (the current data is saved first), view the active model | — |
+
+Deactivating an account, deleting a screening, and restoring a backup all ask for the admin's own password, which the server checks. Backups are saved in `data/backups/` (ignored by git because they contain patient data and password hashes). Everyone is signed out after 30 minutes without activity; set `CEREBRA_IDLE_SECONDS` to change this.
+
+The first healthcare worker starts on the **Local workspace** site (the default site for screenings saved without one). Account changes apply immediately, even to someone already signed in. An admin cannot disable or demote their own account, and at least one active admin always remains. Role and site checks run in Python (`app.py`), so they cannot be bypassed by editing the browser page.
+
 ## Features
 
 - Dashboard with actual dataset distributions and a separate live-screening view.
@@ -89,9 +111,10 @@ Global importance is the mean ROC-AUC decrease across three feature permutations
 ```text
 app.py                         Streamlit host and server-side event handling
 frontend/index.html            Custom component HTML
-frontend/styles.css            Responsive design and themes
-frontend/app.js                Vanilla JS views and Streamlit bridge
-frontend/vendor/               Local Bootstrap and Plotly JavaScript
+frontend/templates/            Separate HTML templates for each page
+frontend/static/css/           Application styles and local Bootstrap CSS
+frontend/static/js/app.js      Page behavior, charts, and Streamlit bridge
+frontend/static/js/            Generated HTML bundle and local Plotly library
 frontend/assets/logo.png       Provided CEREBRA logo
 cerebra/config.py              Features, categories, ranges, and paths
 cerebra/model.py               Validation, inference, Shapley explanations
@@ -109,6 +132,10 @@ references/figma-original/      Original extracted React/Figma reference
 The Figma source was preserved as a reference. Its environment-specific instructions and hardcoded model are not part of this runtime.
 
 ## Verification
+
+Frontend pages have separate HTML templates and one shared JavaScript file. See the
+[frontend file guide](frontend/README.md) for page locations, comments, and the
+template editing workflow.
 
 ```powershell
 python -m pip --python .venv install -r requirements-dev.txt

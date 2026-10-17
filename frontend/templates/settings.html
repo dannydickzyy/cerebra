@@ -1,0 +1,87 @@
+<!-- Settings templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for settings. Values come from the matching page controller. -->
+<template id="settings">
+  <div class="settings-wrap stack">
+    {{account_panel}}{{appearance_panel}}{{storage_panel}}
+  </div>
+</template>
+
+<!-- Markup for settings appearance. Values come from the matching page controller. -->
+<template id="settings-appearance">
+  <div class="settings-row">
+    <div>
+      <h3>Color theme</h3>
+      <p>Switch between the light and dark designs.</p>
+    </div>
+    <div class="segmented">
+      <button data-theme="light" class="{{light_active}}">
+        {{sun_icon}} Light
+      </button>
+      <button data-theme="dark" class="{{dark_active}}">
+        {{moon_icon}} Dark
+      </button>
+    </div>
+  </div>
+</template>
+
+<!-- Markup for settings account: signed-in user, password change, sign out. -->
+<template id="settings-account">
+  <div class="settings-row">
+    <div class="account-summary">
+      <span class="avatar">{{initials}}</span>
+      <div>
+        <h3>{{display_name}}</h3>
+        <p>{{username}} · <span class="role-badge {{role}}">{{role_label}}</span> · {{site_label}}</p>
+      </div>
+    </div>
+    <button class="btn btn-outline-secondary" id="sign-out" {{disabled}}>
+      {{sign_out_icon}} Sign out
+    </button>
+  </div>
+  <form id="password-form" class="settings-row password-form" novalidate>
+    <div>
+      <h3>Change password</h3>
+      <p>Use at least 8 characters. You stay signed in after changing it.</p>
+    </div>
+    <div class="password-fields">
+      <input class="form-control" name="current" type="password" placeholder="Current password" aria-label="Current password" autocomplete="current-password" maxlength="100" required {{disabled}} />
+      <input class="form-control" name="new" type="password" placeholder="New password" aria-label="New password" autocomplete="new-password" minlength="8" maxlength="100" required {{disabled}} />
+      <input class="form-control" name="confirm" type="password" placeholder="Confirm new password" aria-label="Confirm new password" autocomplete="new-password" minlength="8" maxlength="100" required {{disabled}} />
+      <button class="btn btn-primary" type="submit" {{disabled}}>Update password</button>
+    </div>
+  </form>
+</template>
+
+<!-- Markup for settings storage. Values come from the matching page controller. -->
+<template id="settings-storage">
+  <div class="mini-row">
+    <span>Saved screenings</span>
+    <b>{{screening_count}}</b>
+  </div>
+  <div class="mini-row">
+    <span>Database</span>
+    <b>SQLite · local workspace</b>
+  </div>
+  <div class="mini-row">
+    <span>Timezone</span>
+    <b>Asia/Manila</b>
+  </div>
+  <div class="notice mt-3">
+    Clinical inputs and saved explanations are stored in the local database.
+    Browser storage contains appearance preferences only. Use research aliases
+    for demonstrations.
+  </div>
+  <div class="d-flex gap-2 mt-3">
+    <button
+      class="btn btn-outline-secondary"
+      id="refresh-data"
+      {{refresh_disabled}}
+    >
+      {{refresh_icon}} Refresh records
+    </button>
+    <button class="btn btn-outline-secondary" data-nav="patients">
+      Open records
+    </button>
+  </div>
+</template>

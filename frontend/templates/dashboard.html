@@ -1,0 +1,66 @@
+<!-- Dashboard templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for dashboard source switch. Values come from the matching page controller. -->
+<template id="dashboard-source-switch">
+  <div class="context-row">
+    <span class="source-pill"> <span class="dot"> </span>{{source_label}}</span>
+    <div class="segmented" aria-label="Analytics source">
+      <button data-source="dataset" class="{{dataset_active}}">
+        Dataset overview
+      </button>
+      <button data-source="screenings" class="{{screenings_active}}">
+        My screenings
+      </button>
+    </div>
+  </div>
+</template>
+
+<!-- Markup for dashboard stats. Values come from the matching page controller. -->
+<template id="dashboard-stats">
+  <div class="grid grid-4 mb-section">
+    {{record_stat}}{{label_stat}}{{recall_stat}}{{auc_stat}}
+  </div>
+</template>
+
+
+<!-- Markup for dashboard records link. Values come from the matching page controller. -->
+<template id="dashboard-records-link">
+  <button class="link-button" data-nav="patients">
+    View all screened patients {{icon_1}}
+  </button>
+</template>
+
+<!-- Markup for dashboard. Values come from the matching page controller. -->
+<template id="dashboard">
+  <div class="grid grid-major">{{throughput_panel}}{{importance_panel}}</div>
+  <div class="section-label">Risk factor analysis</div>
+  <div class="grid grid-3">{{glucose_panel}}{{bmi_panel}}{{smoking_panel}}</div>
+  <div class="grid grid-major mt-4">{{age_panel}}{{recent_panel}}</div>
+  <div class="grid grid-2 mt-4">{{residence_panel}}{{work_panel}}</div>
+</template>
+
+<!-- Markup for dashboard throughput legend. Values come from the matching page controller. -->
+<template id="dashboard-throughput-legend">
+  <div class="legend">
+    <span> <i style="background: #f57930"> </i>{{records_label}}</span>
+    <span> <i style="background: #d94d15"> </i>{{positives_label}}</span>
+  </div>
+</template>
+
+<!-- Markup for dashboard importance note. Values come from the matching page controller. -->
+<template id="dashboard-importance-note">
+  <p class="chart-caption">
+    Permutation importance: change in test ROC-AUC. Near-zero values indicate
+    little measured predictive signal.
+  </p>
+</template>
+
+<!-- Markup for dashboard smoking legend. Values come from the matching page controller. -->
+<template id="dashboard-smoking-legend">
+  <div class="legend">{{legend_items}}</div>
+</template>
+
+<!-- Markup for dashboard smoking legend item. Values come from the matching page controller. -->
+<template id="dashboard-smoking-legend-item">
+  <span> <i style="background:{{color}}"> </i>{{label}} {{share}}</span>
+</template>

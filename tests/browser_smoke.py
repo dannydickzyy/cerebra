@@ -21,8 +21,13 @@ from cerebra.database import list_screenings
 
 OUT = ROOT / "artifacts" / "browser-tests"
 OUT.mkdir(exist_ok=True)
-DB = OUT / f"screenings-{uuid.uuid4().hex[:8]}.sqlite3"
-env = {**os.environ, "CEREBRA_DB_PATH": str(DB), "PYTHONIOENCODING": "utf-8"}
+# Each run gets its own folder, so its backups folder starts empty too.
+DB = OUT / f"run-{uuid.uuid4().hex[:8]}" / "screenings.sqlite3"
+env = {**os.environ, "CEREBRA_DB_PATH": str(DB), "PYTHONIOENCODING": "utf-8",
+       # Test-only accounts for the isolated database (real ones live in the local .env).
+       "CEREBRA_ADMIN_USERNAME": "test-admin", "CEREBRA_ADMIN_PASSWORD": "test-pass-123",
+       "CEREBRA_ADMIN_NAME": "Test Admin", "CEREBRA_WORKER_USERNAME": "test-worker",
+       "CEREBRA_WORKER_PASSWORD": "test-pass-123", "CEREBRA_WORKER_NAME": "Test Worker"}
 log = (OUT / "server.log").open("w", encoding="utf-8")
 
 
@@ -42,6 +47,12 @@ def start():
     raise RuntimeError("Test server did not start")
 
 
+def sign_in(frame, username, password):
+    frame.locator("#login-username").fill(username)
+    frame.locator("#login-password").fill(password)
+    frame.locator('#login-form button[type="submit"]').click()
+
+
 server = start()
 errors = []
 try:
@@ -51,7 +62,15 @@ try:
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.goto("http://127.0.0.1:8502")
         frame = page.frame_locator("iframe")
-        expect(frame.locator(".app-shell")).to_be_visible(timeout=45000)
+        # Only the sign-in form is shown before authentication.
+        expect(frame.locator("#login-form")).to_be_visible(timeout=45000)
+        expect(frame.locator(".app-shell")).to_have_count(0)
+        page.screenshot(path=str(OUT / "login.png"))
+        sign_in(frame, "test-admin", "wrong-password")
+        expect(frame.locator("#login-form .form-error")).to_contain_text("Incorrect username or password")
+        sign_in(frame, "test-admin", "test-pass-123")
+        expect(frame.locator(".app-shell")).to_be_visible(timeout=30000)
+        print("PASS sign-in required and wrong password rejected")
         expect(frame.locator("#throughput .main-svg").first).to_be_visible(timeout=15000)
         page.screenshot(path=str(OUT / "dashboard-light.png"))
         print("PASS dashboard and actual dataset metrics")
@@ -140,7 +159,9 @@ try:
         print("PASS search, risk/date filters, CSV export, breakdown, and follow-up")
 
         for target in ["population", "model", "settings", "help"]:
-            frame.locator(f'aside [data-nav="{target}"]').click()
+            # Settings opens from the profile avatar in the top bar, not the sidebar.
+            link = ".topbar-profile" if target == "settings" else f'aside [data-nav="{target}"]'
+            frame.locator(link).click()
             expect(frame.locator(".content .panel").first).to_be_visible()
             page.screenshot(path=str(OUT / f"{target}.png"))
         frame.locator('aside [data-nav="model"]').click()
@@ -150,6 +171,8 @@ try:
 
         # A fresh browser session must still see both persisted rows.
         page.reload()
+        expect(frame.locator("#login-form")).to_be_visible(timeout=30000)
+        sign_in(frame, "test-admin", "test-pass-123")
         expect(frame.locator(".app-shell")).to_be_visible(timeout=30000)
         frame.locator('aside [data-nav="patients"]').click()
         expect(frame.locator("#record-count")).to_have_text("2 records")
@@ -157,6 +180,89 @@ try:
         frame.locator('aside [data-nav="dashboard"]').click()
         frame.locator('[data-source="screenings"]').click()
         expect(frame.locator(".stat-value").first).to_have_text("2")
+
+        # Admin-only audit log; workers neither see it nor receive its data.
+        frame.locator('aside [data-nav="audit"]').click()
+        expect(frame.locator(".audit-table")).to_contain_text("Failed sign-in")
+        expect(frame.locator(".audit-table")).to_contain_text("Screening saved")
+        page.screenshot(path=str(OUT / "audit.png"))
+        frame.locator(".topbar-profile").click()
+        frame.locator("#sign-out").click()
+        expect(frame.locator("#login-form")).to_be_visible(timeout=15000)
+        sign_in(frame, "test-worker", "test-pass-123")
+        expect(frame.locator(".app-shell")).to_be_visible(timeout=30000)
+        expect(frame.locator('aside [data-nav="audit"]')).to_have_count(0)
+        assert page.frames[1].evaluate("state.data.audit.length") == 0
+        page.frames[1].evaluate("nav('audit')")
+        expect(frame.locator(".topbar h1")).to_have_text("Health analytics overview")
+        print("PASS admin-only audit log, sign out, and worker access")
+
+        # Site scoping: test-worker (Local workspace) sees none of the clinic's records or the user list.
+        component = page.frames[1]
+        assert component.evaluate("state.data.patients.length") == 0
+        assert component.evaluate("state.data.users.length") == 0
+        expect(frame.locator('aside [data-nav="users"]')).to_have_count(0)
+        frame.locator(".topbar-profile").click()
+        frame.locator("#sign-out").click()
+        sign_in(frame, "test-admin", "test-pass-123")
+        expect(frame.locator(".app-shell")).to_be_visible(timeout=30000)
+        frame.locator('aside [data-nav="users"]').click()
+        create = frame.locator("#user-create-form")
+        create.locator('[name="username"]').fill("nurse.ana")
+        create.locator('[name="display_name"]').fill("Nurse Ana")
+        create.locator('[name="site"]').fill("Researcher's clinic")
+        create.locator('[name="password"]').fill("secret-pass")
+        create.locator('button[type="submit"]').click()
+        expect(frame.locator(".users-table")).to_contain_text("nurse.ana", timeout=15000)
+        # Disable test-worker from the inline editor.
+        row = frame.locator(".users-table tr", has_text="test-worker")
+        row.locator("[data-edit-user]").click()
+        frame.locator('#user-edit-form [name="active"]').uncheck()
+        frame.locator('#user-edit-form button[type="submit"]').click()
+        # Deactivation asks for the admin's own password first.
+        expect(frame.locator("#confirm-modal")).to_be_visible()
+        frame.locator("#confirm-password").fill("wrong-pass")
+        frame.locator("#confirm-submit").click()
+        expect(frame.locator("#confirm-modal")).to_contain_text("Your password is incorrect", timeout=15000)
+        frame.locator("#confirm-password").fill("test-pass-123")
+        frame.locator("#confirm-submit").click()
+        expect(frame.locator(".users-table tr", has_text="test-worker")).to_contain_text("Disabled", timeout=15000)
+        page.screenshot(path=str(OUT / "users.png"))
+
+        # System page: back up, delete a record (password-confirmed), then restore it.
+        frame.locator('aside [data-nav="system"]').click()
+        frame.locator("#create-backup").click()
+        expect(frame.locator(".backup-table tbody tr")).to_have_count(1, timeout=15000)
+        frame.locator('aside [data-nav="breakdown"]').click()
+        frame.locator("#delete-screening").click()
+        frame.locator("#confirm-password").fill("wrong-pass")
+        frame.locator("#confirm-submit").click()
+        expect(frame.locator("#confirm-modal")).to_contain_text("Nothing was deleted", timeout=15000)
+        frame.locator("#confirm-password").fill("test-pass-123")
+        frame.locator("#confirm-submit").click()
+        expect(frame.locator("#toast")).to_contain_text("Screening deleted", timeout=15000)
+        assert len(list_screenings(DB)) == 1
+        frame.locator('aside [data-nav="system"]').click()
+        frame.locator(".backup-table tbody tr").last.locator("[data-restore]").click()
+        frame.locator("#confirm-password").fill("test-pass-123")
+        frame.locator("#confirm-submit").click()
+        expect(frame.locator("#toast")).to_contain_text("Backup restored", timeout=15000)
+        assert len(list_screenings(DB)) == 2
+        expect(frame.locator(".backup-table tbody tr")).to_have_count(2)
+        page.screenshot(path=str(OUT / "system.png"))
+        print("PASS backups, password-confirmed delete, and restore")
+        frame.locator(".topbar-profile").click()
+        frame.locator("#sign-out").click()
+        sign_in(frame, "test-worker", "test-pass-123")
+        expect(frame.locator("#login-form .form-error")).to_contain_text("Incorrect username or password", timeout=15000)
+        sign_in(frame, "nurse.ana", "secret-pass")
+        expect(frame.locator(".app-shell")).to_be_visible(timeout=30000)
+        frame.locator('aside [data-nav="patients"]').click()
+        expect(frame.locator("#record-count")).to_have_text("2 records")
+        frame.locator('aside [data-nav="predict"]').click()
+        expect(frame.locator("#site")).to_have_value("Researcher's clinic")
+        expect(frame.locator("#site")).to_have_attribute("readonly", "")
+        print("PASS user management, disabled accounts, and site-scoped records")
 
         # Mobile reflow: no document-level horizontal overflow and usable navigation.
         page.set_viewport_size({"width":390,"height":844})

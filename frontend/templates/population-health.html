@@ -1,0 +1,70 @@
+<!-- Population Health templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for population stats. Values come from the matching page controller. -->
+<template id="population-stats">
+  <div class="grid grid-4 mb-section">
+    {{share_stat}}{{sites_stat}}{{flagged_stat}}{{glucose_stat}}
+  </div>
+</template>
+
+<!-- Markup for population glucose. Values come from the matching page controller. -->
+<template id="population-glucose">
+  {{glucose}}<span style="font-size: 13px"> mg/dL</span>
+</template>
+
+<!-- Markup for population site row. Values come from the matching page controller. -->
+<template id="population-site-row">
+  <div class="site-row">
+    <div class="site-labels">
+      <div><span class="site-index">{{rank}}</span>{{site_name}}</div>
+      <small
+        >{{screening_count}} screened ·
+        <strong style="color: var(--orange)">{{high_share}} high label</strong>
+      </small>
+    </div>
+    <div class="site-track">
+      <span style="width:{{bar_width}}%"> </span>
+    </div>
+  </div>
+</template>
+
+<!-- Markup for population no sites. Values come from the matching page controller. -->
+<template id="population-no-sites">
+  <p class="chart-caption mt-3">
+    Descriptive counts of saved screenings. Site comparisons are not population
+    prevalence estimates and may reflect small or unequal samples.
+  </p>
+</template>
+
+<!-- Markup for population health. Values come from the matching page controller. -->
+<template id="population-health">
+  <div class="grid grid-3 mt-4">
+    {{follow_up_panel}}{{hypertension_panel}}{{source_panel}}
+  </div>
+  <div class="grid grid-2 mt-4">{{age_panel}}{{residence_panel}}</div>
+</template>
+
+<!-- Markup for population follow up. Values come from the matching page controller. -->
+<template id="population-follow-up">
+  <div class="stat-value" style="color: var(--orange)">{{pending_count}}</div>
+  <p class="small muted">High-label records not yet marked as contacted.</p>
+  <button class="link-button" id="view-pending">
+    Review records {{arrow_icon}}
+  </button>
+</template>
+
+<!-- Markup for population hypertension. Values come from the matching page controller. -->
+<template id="population-hypertension">
+  <div class="stat-value">{{hypertension_share}}</div>
+  <p class="small muted">
+    {{hypertension_count}} of {{high_count}} saved high-label profiles.
+  </p>
+</template>
+
+<!-- Markup for population source note. Values come from the matching page controller. -->
+<template id="population-source-note">
+  <div class="notice">
+    This view uses <strong>{{screening_count}} saved screenings</strong>. The
+    50,000 synthetic source records are available separately on the dashboard.
+  </div>
+</template>

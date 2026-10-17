@@ -1,0 +1,203 @@
+<!-- Screened Patients templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for screened patients. Values come from the matching page controller. -->
+<template id="screened-patients">
+  <section class="panel table-panel">
+    <div class="table-toolbar">
+      <div>
+        <div class="eyebrow mb-2">Screened patients</div>
+        <h2 id="record-count">{{record_count}} records</h2>
+      </div>
+      <div class="table-tools">
+        <div class="search-box">
+          {{search_icon}}<input
+            class="form-control"
+            id="patient-search"
+            value="{{query}}"
+            placeholder="Name or patient ID…"
+            aria-label="Filter by name or patient ID"
+          />
+        </div>
+        <div class="segmented" aria-label="Risk filter">{{risk_filters}}</div>
+        <div class="date-filter">
+          <button
+            class="btn btn-outline-secondary"
+            id="date-toggle"
+            aria-expanded="{{date_expanded}}"
+          >
+            {{calendar_icon}}{{date_label}}</button
+          >{{date_popover}}
+        </div>
+        <button
+          class="icon-button"
+          id="extra-filters"
+          aria-label="More filters"
+          aria-expanded="{{filters_expanded}}"
+        >
+          {{filter_icon}}
+        </button>
+        <button
+          class="icon-button"
+          id="export-csv"
+          aria-label="Export filtered records as CSV"
+          title="Export filtered records as CSV"
+        >
+          {{download_icon}}
+        </button>
+      </div>
+    </div>
+    {{extra_filters}}
+    <div id="patients-table">{{patient_table}}</div>
+  </section>
+  <p class="chart-caption mt-3">
+    Select a record to view its saved model explanation. Labels describe the
+    model cutoff; they are not diagnoses. Screening dates use Asia/Manila.
+  </p>
+</template>
+
+<!-- Markup for patients risk filter. Values come from the matching page controller. -->
+<template id="patients-risk-filter">
+  <button class="{{active_class}}" data-risk="{{risk_label}}">{{label}}</button>
+</template>
+
+<!-- Markup for patients date popover. Values come from the matching page controller. -->
+<template id="patients-date-popover">
+  <div class="date-popover">
+    <div class="eyebrow">Quick select</div>
+    <div class="quick-dates">{{date_presets}}</div>
+    <div class="eyebrow">Custom range</div>
+    <form id="date-form">
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label" for="date-from">From</label>
+          <input
+            type="date"
+            class="form-control"
+            id="date-from"
+            name="from"
+            value="{{from_date}}"
+            required
+          />
+        </div>
+        <div class="col-6">
+          <label class="form-label" for="date-to">To</label>
+          <input
+            type="date"
+            class="form-control"
+            id="date-to"
+            name="to"
+            value="{{to_date}}"
+            required
+          />
+        </div>
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Apply</button>
+    </form>
+  </div>
+</template>
+
+<!-- Markup for patients date preset. Values come from the matching page controller. -->
+<template id="patients-date-preset">
+  <button class="{{active_class}}" data-date="{{date_key}}">{{label}}</button>
+</template>
+
+<!-- Markup for patients extra filters. Values come from the matching page controller. -->
+<template id="patients-extra-filters">
+  <div class="filter-options">
+    <label
+      >Site<select id="site-filter" class="form-select">
+        {{site_options}}
+      </select>
+    </label>
+    <label
+      >Smoking<select id="smoking-filter" class="form-select">
+        {{smoking_options}}
+      </select>
+    </label>
+    <button class="btn btn-outline-secondary" id="clear-filters">
+      Clear filters
+    </button>
+  </div>
+</template>
+
+<!-- Markup for patients site option. Values come from the matching page controller. -->
+<template id="patients-site-option">
+  <option {{selected}}>{{site}}</option>
+</template>
+
+
+<!-- Markup for patients table. Values come from the matching page controller. -->
+<template id="patients-table">
+  <div class="table-responsive">
+    <table class="records-table">
+      <thead>
+        <tr>
+          {{headers}}
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer">
+    <span
+      >Showing {{first_record}}–{{last_record}} of {{matched_count}} matched
+      records · {{total_count}} total</span
+    >
+    <div class="d-flex gap-2 align-items-center">
+      {{pagination}}<span class="micro">EXPERIMENTAL · THRESHOLD 50%</span>
+    </div>
+  </div>
+</template>
+
+<!-- Markup for patients table heading. Values come from the matching page controller. -->
+<template id="patients-table-heading">
+  <th scope="col">{{label}}</th>
+</template>
+
+<!-- Markup for patients table row. Values come from the matching page controller. -->
+<template id="patients-table-row">
+  <tr
+    tabindex="0"
+    data-patient="{{patient_id}}"
+    aria-label="View {{accessible_name}}"
+  >
+    <td>
+      <div class="patient-name">{{participant_name}}</div>
+      <div class="patient-id">{{display_id}}</div>
+      <div class="record-date">{{screened_date}}</div>
+    </td>
+    <td>{{age}}</td>
+    <td>{{glucose}}<span class="micro muted"> mg/dL</span></td>
+    <td>{{bmi}}</td>
+    <td>
+      {{hypertension_badge}}{{heart_disease_badge}}{{no_conditions_badge}}
+    </td>
+    <td>{{smoking_status}}</td>
+    <td>{{married}}</td>
+    <td>{{work_type}}</td>
+    <td>{{residence}}</td>
+    <td class="score-cell {{risk_class}}">{{score}}</td>
+    <td>{{risk_badge}}</td>
+  </tr>
+</template>
+
+<!-- Markup for patients pagination. Values come from the matching page controller. -->
+<template id="patients-pagination">
+  <button
+    class="btn btn-outline-secondary"
+    data-page-step="-1"
+    {{previous_disabled}}
+  >
+    Previous
+  </button>
+  <span>{{current_page}} / {{total_pages}}</span>
+  <button
+    class="btn btn-outline-secondary"
+    data-page-step="1"
+    {{next_disabled}}
+  >
+    Next
+  </button>
+</template>

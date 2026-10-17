@@ -1,7 +1,7 @@
 {
   "selected": "Logistic Regression + SMOTE",
-  "version": "33da23e4e990",
-  "trained_at": "2026-09-26T07:01:59.938441+00:00",
+  "version": "043d7b7b254d",
+  "trained_at": "2026-10-17T07:31:28.514635+00:00",
   "threshold": 0.5,
   "selection_rule": "Highest validation recall, then F1, then ROC-AUC; fixed 0.50 threshold",
   "results": {

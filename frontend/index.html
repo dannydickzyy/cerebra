@@ -1,27 +1,51 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>CEREBRA · Stroke Analytics</title>
-  <link rel="icon" href="assets/logo.png">
-  <link rel="stylesheet" href="vendor/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="vendor/plotly.min.js"></script>
-  <script defer src="app.js"></script>
-</head>
-<body>
-  <a class="skip-link" href="#content">Skip to content</a>
-  <div id="app"><div class="boot"><img src="assets/logo.png" alt=""><h1>CEREBRA</h1><p>Opening your analytics workspace…</p></div></div>
-  <dialog id="loading-modal" class="loading-modal" aria-labelledby="loading-title" aria-describedby="loading-description">
-    <div class="loading-orbit" aria-hidden="true"><img src="assets/logo.png" alt=""></div>
-    <div class="eyebrow">CEREBRA · PLEASE WAIT</div>
-    <div role="status" aria-live="polite" aria-atomic="true">
-      <h2 id="loading-title"></h2>
-      <p id="loading-description"></p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CEREBRA · Stroke Analytics</title>
+    <link rel="icon" href="assets/logo.png" />
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="static/css/styles.css" />
+    <!-- Local libraries, compiled HTML templates, then application behavior. -->
+    <script defer src="static/js/plotly.min.js"></script>
+    <script defer src="static/js/templates.generated.js"></script>
+    <script defer src="static/js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <!-- Shared shell: render() replaces the startup view with the selected page. -->
+    <div id="app">
+      <div class="boot">
+        <img src="assets/logo.png" alt="" />
+        <h1>CEREBRA</h1>
+        <p>Opening your analytics workspace…</p>
+      </div>
     </div>
-    <div class="loading-footnote">Please keep this window open.</div>
-  </dialog>
-  <div id="toast" role="status" aria-live="polite"></div>
-</body>
+    <!-- Blocking progress is reserved for startup and explicit processing tasks. -->
+    <dialog
+      id="loading-modal"
+      class="loading-modal"
+      aria-labelledby="loading-title"
+      aria-describedby="loading-description"
+    >
+      <div class="loading-orbit" aria-hidden="true">
+        <img src="assets/logo.png" alt="" />
+      </div>
+      <div class="eyebrow">CEREBRA · PLEASE WAIT</div>
+      <div role="status" aria-live="polite" aria-atomic="true">
+        <h2 id="loading-title">Opening your workspace…</h2>
+        <p id="loading-description">
+          Loading your dashboard, model results, and saved records.
+        </p>
+      </div>
+      <div class="loading-footnote">Please keep this window open.</div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script>
+      const initialLoadingModal = document.getElementById("loading-modal");
+      initialLoadingModal.oncancel = (event) => event.preventDefault();
+      initialLoadingModal.showModal();
+    </script>
+  </body>
 </html>

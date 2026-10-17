@@ -1,0 +1,69 @@
+<!-- Risk Breakdown templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for risk breakdown. Values come from the matching page controller. -->
+<template id="risk-breakdown">
+  <div class="grid breakdown-layout">
+    <section class="panel">
+      <div class="eyebrow">Select patient</div>
+      <p class="small muted mb-3">{{screening_count}} saved screenings</p>
+      <div class="patient-list">{{patient_list}}</div>
+    </section>
+    <div class="stack">
+      {{overview_panel}}{{explanation_panel}}
+      <div
+        class="panel d-flex justify-content-between align-items-center gap-3 flex-wrap"
+      >
+        <div>
+          <h3>Follow-up status</h3>
+          <p class="small muted mt-2">{{follow_up_status}}</p>
+        </div>
+        <button
+          class="btn btn-outline-secondary"
+          id="follow-up"
+          data-id="{{patient_id}}"
+          data-contacted="{{contacted_value}}"
+          {{disabled}}
+        >
+          {{follow_up_icon}}{{follow_up_label}}
+        </button>
+      </div>
+      {{admin_panel}}
+    </div>
+  </div>
+</template>
+
+<!-- Markup for breakdown profile. Values come from the matching page controller. -->
+<template id="breakdown-profile">
+  <div class="patient-overview">
+    {{gauge}}
+    <div class="patient-overview-info">
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <h2>{{participant_name}}</h2>
+        {{risk_badge}}
+      </div>
+      <p class="small muted mt-2">{{patient_id}} · age {{age}}</p>
+      <div class="detail-grid">{{detail_rows}}</div>
+    </div>
+  </div>
+</template>
+
+<!-- Markup for breakdown detail row. Values come from the matching page controller. -->
+<template id="breakdown-detail-row">
+  <div>
+    <label>{{label}}</label>
+    <p>{{value}}</p>
+  </div>
+</template>
+
+<!-- Admin-only record management below the follow-up panel. -->
+<template id="breakdown-admin">
+  <div class="panel record-admin d-flex justify-content-between align-items-center gap-3 flex-wrap">
+    <div>
+      <h3>Delete this record</h3>
+      <p class="small muted mt-2">Admin only. Removes the screening for every user.</p>
+    </div>
+    <button class="btn btn-outline-danger" id="delete-screening" {{disabled}}>
+      {{trash_icon}} Delete record
+    </button>
+  </div>
+</template>

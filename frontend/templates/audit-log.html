@@ -1,0 +1,60 @@
+<!-- Audit log templates (admin only). Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for the audit log page. Values come from the matching page controller. -->
+<template id="audit-log">
+  <div class="grid grid-3 mb-section">
+    {{events_stat}}{{failed_stat}}{{users_stat}}
+  </div>
+  <section class="panel table-panel">
+    <div class="table-toolbar">
+      <div>
+        <div class="eyebrow">Admin only</div>
+        <h3>Account and record activity</h3>
+      </div>
+      <div class="segmented" aria-label="Activity filter">{{filters}}</div>
+    </div>
+    {{table}}
+  </section>
+  <p class="footer-note">
+    Shows the latest 500 events. Passwords and clinical inputs are never
+    written to the audit log.
+  </p>
+</template>
+
+<!-- Markup for one audit filter button. -->
+<template id="audit-filter">
+  <button data-audit-filter="{{key}}" class="{{active_class}}">
+    {{label}}
+  </button>
+</template>
+
+<!-- Markup for the audit table. -->
+<template id="audit-table">
+  <div class="table-responsive">
+    <table class="records-table audit-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>User</th>
+          <th>Role</th>
+          <th>Activity</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<!-- Markup for one audit row. -->
+<template id="audit-row">
+  <tr class="{{row_class}}">
+    <td>{{time}}</td>
+    <td><b>{{username}}</b></td>
+    <td>{{role}}</td>
+    <td><span class="audit-action {{action_class}}">{{action}}</span></td>
+    <td>{{detail}}</td>
+  </tr>
+</template>

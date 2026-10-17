@@ -1,0 +1,92 @@
+<!-- Notifications templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for notification row. Values come from the matching page controller. -->
+<template id="notification-row">
+  <article class="notification-row {{pending_class}}"{{row_attributes}}>
+    <span class="notification-symbol">{{item_icon}}</span>
+    <div class="notification-copy">
+      <h3>{{title}}</h3>
+      <p>{{description}}</p>
+      <small>Screened {{screened_date}}</small>{{screening_link}}
+    </div>
+  </article>
+</template>
+
+<!-- Markup for notification screening link. Values come from the matching page controller. -->
+<template id="notification-screening-link">
+  <button class="link-button" data-patient="{{patient_id}}">
+    View screening {{arrow_icon}}
+  </button>
+</template>
+
+<!-- Markup for notification summary. Values come from the matching page controller. -->
+<template id="notification-summary">
+  <section
+    class="notifications"
+    id="notification-summary"
+    aria-label="Notifications summary"
+  >
+    <h3>Notifications</h3>
+    <p class="small muted">
+      {{pending_count}} follow-ups pending · {{screening_count}} saved
+      screenings
+    </p>
+    <div class="notification-preview">{{preview_rows}}</div>
+    <p class="small muted">Model evaluation is available.</p>
+    <button class="link-button" data-nav="notifications">
+      View all notifications {{arrow_icon}}
+    </button>
+  </section>
+</template>
+
+<!-- Markup for notifications. Values come from the matching page controller. -->
+<template id="notifications">
+  <div class="notifications-page stack">
+    <div class="grid grid-3">
+      {{screenings_stat}}{{pending_stat}}{{updates_stat}}
+    </div>
+    <section class="panel">
+      <div class="notification-toolbar">
+        <div>
+          <div class="eyebrow">Activity center</div>
+          <h2>All notifications</h2>
+          <p class="small muted mt-2">
+            Latest screenings first, with current follow-up status.
+          </p>
+        </div>
+        <div class="segmented" aria-label="Filter notifications">
+          {{filters}}
+        </div>
+      </div>
+      <div class="notification-list">{{activity_rows}}{{workspace_update}}</div>
+    </section>
+  </div>
+</template>
+
+<!-- Markup for notifications filter. Values come from the matching page controller. -->
+<template id="notifications-filter">
+  <button
+    data-notification-filter="{{filter_key}}"
+    class="{{active_class}}"
+    aria-pressed="{{pressed}}"
+  >
+    {{label}}
+  </button>
+</template>
+
+<!-- Markup for notifications model update. Values come from the matching page controller. -->
+<template id="notifications-model-update">
+  <article class="notification-row">
+    <span class="notification-symbol">{{model_icon}}</span>
+    <div class="notification-copy">
+      <h3>Model evaluation available</h3>
+      <p>
+        Review measured results for {{model_name}} and compare all evaluated
+        models.
+      </p>
+      <button class="link-button" data-nav="model">
+        View model performance {{arrow_icon}}
+      </button>
+    </div>
+  </article>
+</template>

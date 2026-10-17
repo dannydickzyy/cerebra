@@ -3,6 +3,7 @@ dist/
 build/
 .cache/
 .env*
+!.env.example
 .vite/
 vite.config.*.timestamp-*
 *.tsbuildinfo
@@ -27,6 +28,7 @@ __pycache__/
 .pytest_cache/
 pytest-cache-files-*/
 data/*.sqlite3*
+data/backups/
 artifacts/browser-tests/
 artifacts/*browser*.png
 artifacts/*inspect*.png

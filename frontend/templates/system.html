@@ -1,0 +1,61 @@
+<!-- System templates (admin only). Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for the system page: backups and the active model. -->
+<template id="system">
+  <div class="grid grid-4 mb-section">
+    {{model_stat}}{{records_stat}}{{accounts_stat}}{{backups_stat}}
+  </div>
+  <section class="panel table-panel">
+    <div class="table-toolbar">
+      <div>
+        <div class="eyebrow">Admin only</div>
+        <h3>Database backups</h3>
+      </div>
+      <button class="btn btn-primary" id="create-backup" {{disabled}}>
+        {{backup_icon}} Create backup now
+      </button>
+    </div>
+    <p class="small muted backup-note">
+      Each backup is a full copy of screenings, accounts, and the audit log,
+      saved on this computer in <code>{{folder}}</code>. Restoring first saves
+      the current data as a new backup, so it can be undone.
+    </p>
+    {{table}}
+  </section>
+  <div class="mt-4">{{model_panel}}</div>
+</template>
+
+<!-- Backup list. -->
+<template id="backup-table">
+  <div class="table-responsive">
+    <table class="records-table backup-table">
+      <thead>
+        <tr>
+          <th>Backup</th>
+          <th>Created</th>
+          <th>Size</th>
+          <th>Screenings</th>
+          <th>Accounts</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{rows}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<!-- One backup row. -->
+<template id="backup-row">
+  <tr>
+    <td><b>{{name}}</b>{{safety_tag}}</td>
+    <td>{{created}}</td>
+    <td>{{size}}</td>
+    <td>{{screenings}}</td>
+    <td>{{users}}</td>
+    <td class="text-end">
+      <button class="btn btn-outline-secondary btn-sm" data-restore="{{name}}" {{disabled}}>Restore</button>
+    </td>
+  </tr>
+</template>

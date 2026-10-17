@@ -1,0 +1,19 @@
+<!-- Shared confirmation dialog for risky admin actions. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Asks for the signed-in user's password; the server checks it again. -->
+<template id="confirm-dialog">
+  <dialog id="confirm-modal" class="confirm-modal" aria-labelledby="confirm-title">
+    <form id="confirm-form" novalidate>
+      <div class="confirm-icon">{{warning_icon}}</div>
+      <h2 id="confirm-title">{{title}}</h2>
+      <p>{{body}}</p>
+      {{error}}
+      <label class="form-label" for="confirm-password">Enter your password to continue</label>
+      <input class="form-control" id="confirm-password" name="password" type="password" autocomplete="current-password" maxlength="100" required />
+      <div class="confirm-actions">
+        <button type="button" class="btn btn-outline-secondary" id="confirm-cancel">Cancel</button>
+        <button type="submit" class="btn btn-danger" id="confirm-submit">{{confirm_label}}</button>
+      </div>
+    </form>
+  </dialog>
+</template>

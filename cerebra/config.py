@@ -2,6 +2,19 @@ from pathlib import Path
 import os
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _load_env_file(path=ROOT / ".env"):
+    """Read KEY=VALUE lines from the local .env file (ignored by git); real env vars win."""
+    if not path.exists():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        key, sep, value = line.strip().partition("=")
+        if sep and key and not key.startswith("#"):
+            os.environ.setdefault(key.strip(), value.strip().strip("'\""))
+
+
+_load_env_file()
 DATA_PATH = ROOT / "data" / "stroke.csv"
 ARTIFACT_DIR = ROOT / "artifacts"
 DB_PATH = Path(os.environ.get("CEREBRA_DB_PATH", ROOT / "data" / "cerebra.sqlite3"))

@@ -1,0 +1,85 @@
+<!-- Sign-in templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Sign-in screen shown before any workspace data is loaded: one rounded card with
+     a white illustrated side (curved edge) and the sign-in form on the dark side. -->
+<template id="login">
+  <main class="login-screen" id="content" tabindex="-1">
+    <span class="login-bubble b1" aria-hidden="true"></span>
+    <span class="login-bubble b2" aria-hidden="true"></span>
+    <span class="login-bubble b3" aria-hidden="true"></span>
+    <span class="login-bubble b4" aria-hidden="true"></span>
+    <section class="login-card" aria-labelledby="login-title">
+      <div class="login-art" aria-hidden="true">
+        <svg class="login-art-shape" viewBox="0 0 600 560" preserveAspectRatio="none">
+          <path d="M0 0H470C525 55 565 125 545 205C525 285 468 305 478 385C488 465 560 500 556 560H0Z" />
+        </svg>
+        <div class="login-brand">CEREBRA</div>
+        <div class="login-illustration">
+          <span class="art-blob"></span>
+          <span class="art-blob inner"></span>
+          <span class="art-dot d1"></span>
+          <span class="art-dot d2"></span>
+          <span class="art-dot d3"></span>
+          <span class="art-dot d4"></span>
+          <img src="assets/logo.png" alt="" />
+        </div>
+        <p class="login-copyright">
+          © 2026 CEREBRA · Stroke Analytics<br />Research prototype
+        </p>
+      </div>
+      <div class="login-form-side">
+        <h1 id="login-title">Login</h1>
+        <form id="login-form" novalidate>
+          {{notice}}
+          {{error}}
+          <div class="login-field">
+            <label for="login-username">Username</label>
+            <input
+              class="form-control"
+              id="login-username"
+              name="username"
+              value="{{username}}"
+              placeholder="Enter your username"
+              autocomplete="username"
+              maxlength="100"
+              required
+              {{disabled}}
+            />
+          </div>
+          <div class="login-field">
+            <label for="login-password">Password</label>
+            <div class="password-input">
+              <input
+                class="form-control"
+                id="login-password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                maxlength="100"
+                required
+                {{disabled}}
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                id="password-toggle"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                {{eye_icon}}
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-primary login-submit" type="submit" {{disabled}}>
+            {{submit_icon}} {{submit_label}}
+          </button>
+        </form>
+        <p class="login-note">
+          No account yet? <b>Ask your administrator.</b>
+        </p>
+        <p class="login-disclaimer">Not a clinical diagnostic tool.</p>
+      </div>
+    </section>
+  </main>
+</template>

@@ -1,0 +1,124 @@
+<!-- User management templates (admin only). Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for the user management page. -->
+<template id="users">
+  <div class="grid grid-4 mb-section">
+    {{accounts_stat}}{{admins_stat}}{{workers_stat}}{{disabled_stat}}
+  </div>
+  {{create_panel}}
+  <section class="panel table-panel mt-4">
+    <div class="table-toolbar">
+      <div>
+        <div class="eyebrow">Admin only</div>
+        <h3>Accounts</h3>
+      </div>
+      <p class="small muted">
+        Healthcare workers only see screenings from their assigned site.
+      </p>
+    </div>
+    <div class="table-responsive">
+      <table class="records-table users-table">
+        <thead>
+          <tr>
+            <th>Account</th>
+            <th>Role</th>
+            <th>Site</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{rows}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <datalist id="site-options">{{site_options}}</datalist>
+</template>
+
+<!-- Form for creating an account. -->
+<template id="user-create">
+  <form id="user-create-form" class="user-form" novalidate>
+    <div class="form-group">
+      <label class="form-label" for="new-username">Username</label>
+      <input class="form-control" id="new-username" name="username" value="{{username}}" maxlength="40" autocomplete="off" required {{disabled}} />
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="new-display-name">Display name</label>
+      <input class="form-control" id="new-display-name" name="display_name" value="{{display_name}}" maxlength="60" required {{disabled}} />
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="new-role">Role</label>
+      <select class="form-select" id="new-role" name="role" data-site-target="new-site" {{disabled}}>
+        {{role_options}}
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="new-site">Site</label>
+      <input class="form-control" id="new-site" name="site" value="{{site}}" list="site-options" maxlength="100" placeholder="{{site_placeholder}}" {{site_disabled}} />
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="new-password">Initial password</label>
+      <input class="form-control" id="new-password" name="password" type="password" minlength="8" maxlength="100" autocomplete="new-password" placeholder="At least 8 characters" required {{disabled}} />
+    </div>
+    <button class="btn btn-primary" type="submit" {{disabled}}>{{plus_icon}} Create account</button>
+  </form>
+</template>
+
+<!-- One account row. -->
+<template id="user-row">
+  <tr class="{{row_class}}">
+    <td>
+      <div class="patient-name">{{display_name}}{{you_label}}</div>
+      <div class="record-date">{{username}}</div>
+    </td>
+    <td><span class="role-badge {{role}}">{{role_label}}</span></td>
+    <td>{{site}}</td>
+    <td><span class="status-badge {{status_class}}">{{status}}</span></td>
+    <td>{{created}}</td>
+    <td class="text-end">
+      <button class="btn btn-outline-secondary btn-sm" data-edit-user="{{id}}" aria-expanded="{{editing}}">
+        {{edit_label}}
+      </button>
+    </td>
+  </tr>
+  {{edit_row}}
+</template>
+
+<!-- Inline editor below an account row. -->
+<template id="user-edit">
+  <tr class="user-edit-row">
+    <td colspan="6">
+      <form id="user-edit-form" class="user-form" data-user-id="{{id}}" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="edit-display-name">Display name</label>
+          <input class="form-control" id="edit-display-name" name="display_name" value="{{display_name}}" maxlength="60" required {{disabled}} />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-role">Role</label>
+          <select class="form-select" id="edit-role" name="role" data-site-target="edit-site" {{self_disabled}}>
+            {{role_options}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-site">Site</label>
+          <input class="form-control" id="edit-site" name="site" value="{{site}}" list="site-options" maxlength="100" placeholder="{{site_placeholder}}" {{site_disabled}} />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-password">Reset password</label>
+          <input class="form-control" id="edit-password" name="password" type="password" minlength="8" maxlength="100" autocomplete="new-password" placeholder="Leave blank to keep" {{disabled}} />
+        </div>
+        <label class="user-active">
+          <input type="checkbox" name="active" {{active_checked}} {{self_disabled}} />
+          Account active
+        </label>
+        <div class="user-edit-actions">
+          <button class="btn btn-primary" type="submit" {{disabled}}>Save changes</button>
+          <button class="btn btn-outline-secondary" type="button" data-edit-user="{{id}}">Cancel</button>
+        </div>
+        {{self_note}}
+      </form>
+    </td>
+  </tr>
+</template>

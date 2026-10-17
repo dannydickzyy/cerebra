@@ -27,7 +27,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBClassifier
 
 from cerebra.analytics import summarize
-from cerebra.config import DATA_PATH, ARTIFACT_DIR, FEATURES, NUMERIC, CATEGORICAL, LABELS, SEED
+from cerebra.config import DATA_PATH, ARTIFACT_DIR, FEATURES, NUMERIC, CATEGORICAL, LABELS, SEED, THRESHOLD
 
 
 def preprocessor():
@@ -39,7 +39,7 @@ def preprocessor():
 
 
 def metrics(y, score):
-    labels = score >= .5
+    labels = score >= THRESHOLD
     tn, fp, fn, tp = confusion_matrix(y, labels, labels=[0, 1]).ravel()
     return {"accuracy": float(accuracy_score(y, labels)),
             "precision": float(precision_score(y, labels, zero_division=0)),
@@ -126,7 +126,7 @@ def main():
         indices = np.unique(np.linspace(0, len(a)-1, min(150, len(a))).astype(int))
         return {"x": a[indices].tolist(), "y": b[indices].tolist()}
     report = {"selected": selected, "version": model_version, "trained_at": stamp,
-              "threshold": .5, "selection_rule": "Highest validation recall, then F1, then ROC-AUC; fixed 0.50 threshold",
+              "threshold": THRESHOLD, "selection_rule": "Highest validation recall, then F1, then ROC-AUC; fixed 0.50 threshold",
               "results": results, "validation": selection, "importance": importance,
               "roc_curve": curve(fpr, tpr), "pr_curve": curve(recall, precision),
               "train_count": len(train), "test_count": len(test), "selection_fit_count": len(fit),

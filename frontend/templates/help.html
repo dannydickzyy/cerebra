@@ -1,0 +1,74 @@
+<!-- Help templates. Dynamic slots are supplied by static/js/app.js. -->
+
+<!-- Markup for help. Values come from the matching page controller. -->
+<template id="help">
+  <div class="settings-wrap stack">
+    {{getting_started_panel}}{{source_panel}}{{interpretation_panel}}{{technology_panel}}
+  </div>
+</template>
+
+<!-- Markup for help getting started. Values come from the matching page controller. -->
+<template id="help-getting-started">
+  <div class="notice">
+    <strong>1. New screening</strong>
+    <br />Complete all model fields. Use Unknown for unavailable smoking status
+    and BMI unavailable when it is missing.<br />
+    <br />
+    <strong>2. Predict & review</strong>
+    <br />The Python classifier returns a model score, a threshold label, and
+    signed feature contributions.<br />
+    <br />
+    <strong>3. Save the screening</strong>
+    <br />Saving writes the scored profile and its model version to SQLite.
+    Refreshing or restarting does not remove it.<br />
+    <br />
+    <strong>4. Explore the population</strong>
+    <br />Search and filter saved records, export CSV, review individual
+    explanations, and mark follow-up status.
+  </div>
+</template>
+
+<!-- Markup for help data source. Values come from the matching page controller. -->
+<template id="help-data-source">
+  <p class="small muted" style="line-height: 1.9">
+    Mohammed Borhan Uddin (2025), Mendeley Data, version 1. {{record_count}}
+    synthetic records; {{positive_count}} positive labels; {{missing_bmi_count}}
+    missing BMI values. Provided under CC BY 4.0 according to the proposal.
+  </p>
+  <a
+    class="link-button"
+    href="https://doi.org/10.17632/s2nh6fm925.1"
+    target="_blank"
+    rel="noopener noreferrer"
+    >View dataset attribution {{external_icon}}</a
+  >
+  <div class="notice mt-3">
+    The dataset contains no patient names, screening dates, or screening sites.
+    The app does not fabricate these for the source population.
+  </div>
+</template>
+
+<!-- Markup for help interpretation. Values come from the matching page controller. -->
+<template id="help-interpretation">
+  <div class="notice orange">{{limitations}}</div>
+  <p class="chart-caption mt-3">
+    The proposal's recall target is 70%; model performance reports the measured
+    result even when that target is not achieved. A high accuracy alone can be
+    misleading in this imbalanced dataset.
+  </p>
+</template>
+
+<!-- Markup for help limitation. Values come from the matching page controller. -->
+<template id="help-limitation">
+  <p class="mb-3">{{limitation}}</p>
+</template>
+
+<!-- Markup for help technology. Values come from the matching page controller. -->
+<template id="help-technology">
+  <div class="notice">
+    Streamlit hosts the app and Python model. HTML, CSS, Bootstrap, and vanilla
+    JavaScript provide the interface. Pandas and NumPy prepare the data;
+    scikit-learn, imbalanced-learn SMOTE, and XGBoost train the models. SQLite
+    stores saved screenings.
+  </div>
+</template>
